@@ -19,3 +19,6 @@ jobs:
           SENDER: ${{secrets.SENDER}}
           RECIPIENT: ${{secrets.RECIPIENT}}
           PASSWORD: ${{secrets.PASSWORD}}
+          NAME: ${{secrets.NAME}}
+          BIRTH_MONTH_AND_YEAR: ${{secrets.BIRTH_MONTH_AND_YEAR}}
+          ZIP: ${{secrets.ZIP}}
