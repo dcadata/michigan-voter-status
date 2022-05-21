@@ -9,6 +9,6 @@ To set this up for yourself, fork this repo. Then, go to Settings > Secrets > Ac
 * `NAME`: your legal first and last name, separated by a space - e.g. "Jane Doe"
 * `BIRTH_MONTH_AND_YEAR`: the month and year of your birth, separated by a "/" - e.g. "12/1985"
 * `ZIP`: the 5-digit zip code corresponding to your address - e.g. "48001"
-* `SENDER`: the email address used to send the notification
+* `SENDER`: the gmail address used to send the notification
 * `PASSWORD`: the password for `SENDER`
-* `RECIPIENT`: the recipient email address to receive the notification
+* `RECIPIENT`: the recipient email address to receive the notification (any email provider is fine)
