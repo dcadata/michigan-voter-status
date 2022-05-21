@@ -1,5 +1,4 @@
 from os import environ
-from traceback import format_exc
 
 import requests
 from bs4 import BeautifulSoup
@@ -48,21 +47,18 @@ class MIVoterRegistrationChecker:
 
 
 def main():
-    try:
-        first_name, last_name = environ['NAME'].split(None, 1)
-        birth_month, birth_year = environ['BIRTH_MONTH_AND_YEAR'].split('/', 1)
-        checker = MIVoterRegistrationChecker(
-            FirstName=first_name,
-            LastName=last_name,
-            NameBirthMonth=birth_month,
-            NameBirthYear=birth_year,
-            ZipCode=environ['ZIP'],
-        )
-        checker.make_request()
-        if body := checker.get_messages():
-            mailer.send_email('Voter Status Update', body)
-    except Exception as exc:
-        open('exception.txt', 'w').write('\n\n'.join((str(exc), format_exc())))
+    first_name, last_name = environ['NAME'].split(None, 1)
+    birth_month, birth_year = environ['BIRTH_MONTH_AND_YEAR'].split('/', 1)
+    checker = MIVoterRegistrationChecker(
+        FirstName=first_name,
+        LastName=last_name,
+        NameBirthMonth=birth_month,
+        NameBirthYear=birth_year,
+        ZipCode=environ['ZIP'],
+    )
+    checker.make_request()
+    if body := checker.get_messages():
+        mailer.send_email('Voter Status Update', body)
 
 
 if __name__ == '__main__':
