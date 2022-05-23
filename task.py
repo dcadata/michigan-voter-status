@@ -38,10 +38,10 @@ class MIVoterRegistrationChecker:
     @property
     def _calendar_details(self) -> str:
         calendar = self._soup.find('div', dict(id='lblElectionCalendar'))
-        _get_text = lambda label: calendar.find_all('td', {'data-label': lambda x: x.endswith(label)})
-        dates = [i.text for i in _get_text('Election Date')]
-        descriptions = [i.text for i in _get_text('Description')]
-        ballot_previews = [f'Ballot Preview: {i.text}' for i in _get_text('Ballot Preview')]
+        _find_all_endswith = lambda label: calendar.find_all('td', {'data-label': lambda x: x.endswith(label)})
+        dates = [i.text for i in _find_all_endswith('Election Date')]
+        descriptions = [i.text for i in _find_all_endswith('Description')]
+        ballot_previews = [f'Ballot Preview: {i.text}' for i in _find_all_endswith('Ballot Preview')]
         restructured = list(zip(dates, descriptions, ballot_previews))
         return '\n'.join(' - '.join(i) for i in restructured)
 
