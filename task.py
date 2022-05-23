@@ -1,9 +1,9 @@
+from email.mime.text import MIMEText
 from os import environ
+from smtplib import SMTP_SSL
 
 import requests
 from bs4 import BeautifulSoup
-
-import mailer
 
 
 class MIVoterRegistrationChecker:
@@ -46,6 +46,18 @@ class MIVoterRegistrationChecker:
         return '\n'.join(' - '.join(i) for i in restructured)
 
 
+def send_email(subject: str, body: str):
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = environ['SENDER']
+    msg['To'] = environ['RECIPIENT']
+
+    server = SMTP_SSL(host='smtp.gmail.com', port=465)
+    server.login(environ['SENDER'], environ['PASSWORD'])
+    server.send_message(msg)
+    server.quit()
+
+
 def main():
     first_name, last_name = environ['NAME'].split(None, 1)
     birth_month, birth_year = environ['BIRTH_MONTH_AND_YEAR'].split('/', 1)
@@ -58,7 +70,7 @@ def main():
     )
     checker.make_request()
     if body := checker.get_messages():
-        mailer.send_email('Voter Status Update', body)
+        send_email('Voter Status Update', body)
 
 
 if __name__ == '__main__':
