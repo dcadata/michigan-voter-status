@@ -11,7 +11,7 @@ class MIVoterRegistrationChecker:
         self._params = kwargs.copy()
         self._soup = None
 
-    def make_request(self):
+    def make_request(self) -> None:
         r = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=self._params)
         self._soup = BeautifulSoup(r.text, 'lxml')
 
@@ -46,7 +46,7 @@ class MIVoterRegistrationChecker:
         return '\n'.join(' - '.join(i) for i in restructured)
 
 
-def send_email(subject: str, body: str):
+def send_email(subject: str, body: str) -> None:
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = environ['SENDER']
@@ -58,7 +58,7 @@ def send_email(subject: str, body: str):
     server.quit()
 
 
-def main():
+def main() -> None:
     first_name, last_name = environ['NAME'].split(None, 1)
     birth_month, birth_year = environ['BIRTH_MONTH_AND_YEAR'].split('/', 1)
     checker = MIVoterRegistrationChecker(
