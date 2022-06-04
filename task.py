@@ -25,7 +25,7 @@ class MIVoterRegistrationChecker:
 
     @property
     def _is_registered(self) -> bool:
-        return bool(self._soup.find(text='Yes, you are registered! TEST'))
+        return bool(self._soup.find(text='Yes, you are registered!'))
 
     @property
     def _is_registered_text(self) -> str:
