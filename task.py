@@ -9,19 +9,22 @@ from bs4 import BeautifulSoup
 class MIVoterRegistrationChecker:
     def __init__(self, **kwargs):
         self._params = kwargs.copy()
-        self._soup = None
+        self.subject = None
+        self.body = None
 
-    def make_request(self) -> None:
+    def check(self) -> None:
+        self._make_request()
+        self._get_subject_and_body()
+
+    def _make_request(self) -> None:
         r = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=self._params)
         self._soup = BeautifulSoup(r.text, 'lxml')
 
-    def get_messages(self) -> str:
-        messages = []
+    def _get_subject_and_body(self) -> None:
         if not self._is_registered:
-            messages.append(self._is_registered_text)
-        if messages or self._ballot_preview_available:
-            messages.append(self._calendar_details)
-        return '\n'.join(messages)
+            self.subject = self._is_registered_text
+        if self.subject or self._ballot_preview_available:
+            self.body = self._calendar_details
 
     @property
     def _is_registered(self) -> bool:
@@ -68,9 +71,8 @@ def main() -> None:
         NameBirthYear=birth_year,
         ZipCode=environ['ZIP'],
     )
-    checker.make_request()
-    if body := checker.get_messages():
-        send_email('Voter Status Update', body)
+    checker.check()
+    send_email(checker.subject, checker.body)
 
 
 if __name__ == '__main__':
