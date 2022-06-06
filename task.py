@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 class MIVoterRegistrationChecker:
     def __init__(self, **kwargs):
         self._params = kwargs.copy()
-        self.subject = None
-        self.body = None
+        self.subject = ''
+        self.body = ''
 
     def check(self) -> None:
         self._make_request()
@@ -72,7 +72,8 @@ def main() -> None:
         ZipCode=environ['ZIP'],
     )
     checker.check()
-    send_email(checker.subject, checker.body)
+    if checker.subject:
+        send_email(checker.subject, checker.body)
 
 
 if __name__ == '__main__':
