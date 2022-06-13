@@ -7,7 +7,7 @@ from voter_status import send_email
 
 
 def _get_polls(pattern: str) -> list:
-    previous_latest_link = open('data/poll_notifier.txt').read()
+    previous_latest_link = open('data/polls.txt').read()
     response = requests.get('https://nitter.net/PollTrackerUSA/rss')
     soup = BeautifulSoup(response.text, 'xml')
     tweets = soup.select('item')
@@ -15,7 +15,7 @@ def _get_polls(pattern: str) -> list:
     polls = []
     for tweet in tweets:
         if tweet.find('link').text == previous_latest_link:
-            open('data/poll_notifier.txt', 'w').write(tweets[0].find('link').text)
+            open('data/polls.txt', 'w').write(tweets[0].find('link').text)
             return polls
         title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
         if re.search(pattern, title):

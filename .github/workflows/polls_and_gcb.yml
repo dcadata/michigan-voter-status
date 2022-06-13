@@ -1,4 +1,4 @@
-name: Poll and GCB Notifier
+name: Polls and GCB Notifier
 
 on:
   workflow_dispatch:
