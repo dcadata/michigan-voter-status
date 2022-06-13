@@ -26,8 +26,9 @@ def _get_polls(pattern: str) -> list:
 
 
 def main() -> None:
-    polls = ['{title} (PubDate: {pubdate})'.format(**poll) for poll in _get_polls('#MI')]
-    send_email('Poll Alert', '\n\n___\n\n'.join(polls))
+    if polls := _get_polls('#MI'):
+        polls = ['{title} (PubDate: {pubdate})'.format(**poll) for poll in polls]
+        send_email('Poll Alert', '\n\n___\n\n'.join(polls))
 
 
 if __name__ == '__main__':
