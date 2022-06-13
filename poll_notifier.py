@@ -5,7 +5,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-from checker import send_email
+from voter_status_checker import send_email
 
 
 def _get_soup() -> BeautifulSoup:
