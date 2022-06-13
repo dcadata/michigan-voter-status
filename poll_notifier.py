@@ -18,12 +18,12 @@ def _get_relevant_tweets(soup: BeautifulSoup, include: list) -> list:
     relevant_tweets = []
     tweets = soup.select('item')
     for tweet in tweets:
-        if tweet.find('link').text == open('poll_notifier_last_seen_link.txt').read():
+        if tweet.find('link').text == open('data/poll_notifier_last_seen_link.txt').read():
             return []
         title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
         if re.search('|'.join(include), title):
             relevant_tweets.append(dict(title=title, pubdate=pubdate))
-    open('poll_notifier_last_seen_link.txt', 'w').write(tweets[0].find('link').text)
+    open('data/poll_notifier_last_seen_link.txt', 'w').write(tweets[0].find('link').text)
     return relevant_tweets
 
 
@@ -45,9 +45,9 @@ def _get_fte_gcb() -> str:
     difference = 'R+{}'.format(round(estimates['R'] - estimates['D'], 1))
     output = 'D: {D}\nR: {R}\n{difference}'.format(difference=difference, **estimates)
 
-    if output == open('fte_gcb.txt').read():
+    if output == open('data/fte_gcb.txt').read():
         return ''
-    open('fte_gcb.txt', 'w').write(output)
+    open('data/fte_gcb.txt', 'w').write(output)
     return output
 
 
