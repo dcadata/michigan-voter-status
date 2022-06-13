@@ -15,10 +15,14 @@ def _get_soup() -> BeautifulSoup:
 
 def _get_relevant_tweets(soup: BeautifulSoup, include: list) -> list:
     relevant_tweets = []
-    for tweet in soup.select('item'):
-        title, pubdate = map(lambda x: tweet.select_one(x).text.strip(), ('title', 'pubDate'))
+    tweets = soup.select('item')
+    for tweet in tweets:
+        if tweet.find('link').text == open('poll_notifier_last_seen_link.txt').read():
+            return []
+        title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
         if re.search('|'.join(include), title):
             relevant_tweets.append(dict(title=title, pubdate=pubdate))
+    open('poll_notifier_last_seen_link.txt', 'w').write(tweets[0].find('link').text)
     return relevant_tweets
 
 
