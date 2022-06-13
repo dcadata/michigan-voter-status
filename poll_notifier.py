@@ -1,36 +1,33 @@
 import re
-from time import sleep
 
 import requests
 from bs4 import BeautifulSoup
 
-from voter_status_checker import has_changes, send_email
+from voter_status_checker import send_email
 
 
 def _get_polls(pattern: str) -> list:
+    previous_latest_link = open('data/poll_notifier.txt').read()
     response = requests.get('https://nitter.net/PollTrackerUSA/rss')
     soup = BeautifulSoup(response.text, 'xml')
-
     tweets = soup.select('item')
+
+    polls = []
+    for tweet in tweets:
+        if tweet.find('link').text == previous_latest_link:
+            open('data/poll_notifier.txt', 'w').write(tweets[0].find('link').text)
+            return polls
+        title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
+        if re.search(pattern, title):
+            polls.append(dict(title=title, pubdate=pubdate))
+
     open('data/poll_notifier.txt', 'w').write(tweets[0].find('link').text)
-
-    if has_changes():
-        polls = []
-        for tweet in tweets:
-            title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
-            if re.search(pattern, title):
-                polls.append(dict(title=title, pubdate=pubdate))
-        return ['{title} (PubDate: {pubdate})'.format(**i) for i in polls]
-
-    return []
+    return polls
 
 
 def main() -> None:
-    polls = _get_polls('#MI')
-    length = len(polls)
-    for n, body in enumerate(polls):
-        send_email(f'Poll Alert ({n + 1}/{length})', body)
-        sleep(1)
+    polls = ['{title} (PubDate: {pubdate})'.format(**poll) for poll in _get_polls('#MI')]
+    send_email('Poll Alert', '\n\n___\n\n'.join(polls))
 
 
 if __name__ == '__main__':
