@@ -12,25 +12,18 @@ def _get_polls(keywords: list) -> list:
     response = requests.get('https://nitter.net/PollTrackerUSA/rss')
     soup = BeautifulSoup(response.text, 'xml')
 
-    relevant_tweets = []
+    polls = []
     tweets = soup.select('item')
     for tweet in tweets:
         if tweet.find('link').text == open('data/poll_notifier.txt').read():
             return []
         title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
         if re.search('|'.join(keywords), title):
-            relevant_tweets.append(dict(title=title, pubdate=pubdate))
+            polls.append(dict(title=title, pubdate=pubdate))
 
     open('data/poll_notifier.txt', 'w').write(tweets[0].find('link').text)
 
-    return relevant_tweets
-
-
-def _send_polls_emails(email_bodies: list) -> None:
-    length = len(email_bodies)
-    for n, body in enumerate(email_bodies):
-        send_email(f'Poll Alert ({n + 1}/{length})', body)
-        sleep(1)
+    return ['{title} (PubDate: {pubdate})'.format(**i) for i in polls]
 
 
 def _get_fte_gcb() -> str:
@@ -51,8 +44,12 @@ def _get_fte_gcb() -> str:
 
 
 def main() -> None:
-    if polls := _get_polls(['#MI']):
-        _send_polls_emails(['{title} (PubDate: {pubdate})'.format(**i) for i in polls])
+    if poll_bodies := _get_polls(['#MI']):
+        length = len(poll_bodies)
+        for n, body in enumerate(poll_bodies):
+            send_email(f'Poll Alert ({n + 1}/{length})', body)
+            sleep(1)
+
     if fte_gcb := _get_fte_gcb():
         send_email('FTE GCB Alert', fte_gcb)
 
