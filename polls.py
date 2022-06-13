@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from voter_status_checker import send_email
+from voter_status import send_email
 
 
 def _get_polls(pattern: str) -> list:

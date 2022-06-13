@@ -14,4 +14,4 @@ To set this up for yourself, fork this repo. Then, go to Settings > Secrets > Ac
 * `RECIPIENT`: the recipient email address to receive the notification (any email provider is fine)
 
 
-`Poll and GCB Notifier` has also been added. If you don't want notifications for polls/GCB, just delete the file `.github/workflows/poll_and_gcb_notifier.yml`.
+`Poll and GCB Notifier` has also been added. If you don't want notifications for polls/GCB, just delete the file `.github/workflows/polls_and_gcb.yml`.

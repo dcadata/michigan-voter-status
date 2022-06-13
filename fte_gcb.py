@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-from voter_status_checker import has_changes, send_email
+from voter_status import has_changes, send_email
 
 
 def _download_fte_gcb() -> None:
