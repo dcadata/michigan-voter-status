@@ -14,8 +14,9 @@ def _get_polls(keywords: list) -> list:
 
     polls = []
     tweets = soup.select('item')
+    previous_link = open('data/poll_notifier.txt').read()
     for tweet in tweets:
-        if tweet.find('link').text == open('data/poll_notifier.txt').read():
+        if tweet.find('link').text == previous_link:
             return []
         title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
         if re.search('|'.join(keywords), title):
