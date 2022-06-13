@@ -34,7 +34,7 @@ def _send_emails(email_bodies: list) -> None:
 
 
 def main() -> None:
-    relevant_tweets = _get_relevant_tweets(_get_soup(), ['#MI', '#MN'])
+    relevant_tweets = _get_relevant_tweets(_get_soup(), ['#MI'])
     _send_emails(['{title} (PubDate: {pubdate})'.format(**tweet) for tweet in relevant_tweets])
 
 
