@@ -16,9 +16,9 @@ jobs:
       - run: pip3 install -r requirements.txt
       - run: python task.py
         env:
-          SENDER: ${{secrets.SENDER}}
-          RECIPIENT: ${{secrets.RECIPIENT}}
-          PASSWORD: ${{secrets.PASSWORD}}
           NAME: ${{secrets.NAME}}
           BIRTH_MONTH_AND_YEAR: ${{secrets.BIRTH_MONTH_AND_YEAR}}
           ZIP: ${{secrets.ZIP}}
+          SENDER: ${{secrets.SENDER}}
+          PASSWORD: ${{secrets.PASSWORD}}
+          RECIPIENT: ${{secrets.RECIPIENT}}
