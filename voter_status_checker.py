@@ -1,5 +1,5 @@
 from email.mime.text import MIMEText
-from os import environ
+from os import environ, popen
 from smtplib import SMTP_SSL
 
 import requests
@@ -47,6 +47,10 @@ class MIVoterRegistrationChecker:
         ballot_previews = [f'Ballot Preview: {i.text}' for i in _find_all_endswith('Ballot Preview')]
         restructured = list(zip(dates, descriptions, ballot_previews))
         return '\n'.join(' - '.join(i) for i in restructured)
+
+
+def has_changes() -> bool:
+    return popen('git status').read().splitlines()[-1] != 'nothing to commit, working tree clean'
 
 
 def send_email(subject: str, body: str) -> None:

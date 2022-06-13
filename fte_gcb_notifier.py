@@ -1,9 +1,7 @@
-import os
-
 import pandas as pd
 import requests
 
-from voter_status_checker import send_email
+from voter_status_checker import has_changes, send_email
 
 
 def _download_fte_gcb() -> None:
@@ -25,7 +23,7 @@ def _format_fte_gcb() -> str:
 
 def _send_fte_gcb() -> None:
     _download_fte_gcb()
-    if os.popen('git status').read().splitlines()[-1] != 'nothing to commit, working tree clean':
+    if has_changes():
         send_email('FTE GCB Alert', _format_fte_gcb())
 
 
