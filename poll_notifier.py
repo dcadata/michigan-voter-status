@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from voter_status_checker import has_changes, send_email
 
 
-def _get_polls(keywords: list) -> list:
+def _get_polls(pattern: str) -> list:
     response = requests.get('https://nitter.net/PollTrackerUSA/rss')
     soup = BeautifulSoup(response.text, 'xml')
 
@@ -18,7 +18,7 @@ def _get_polls(keywords: list) -> list:
         polls = []
         for tweet in tweets:
             title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
-            if re.search('|'.join(keywords), title):
+            if re.search(pattern, title):
                 polls.append(dict(title=title, pubdate=pubdate))
         return ['{title} (PubDate: {pubdate})'.format(**i) for i in polls]
 
@@ -26,7 +26,7 @@ def _get_polls(keywords: list) -> list:
 
 
 def main() -> None:
-    polls = _get_polls(['#MI'])
+    polls = _get_polls('(#MI|#..(Sen|SEN))')
     length = len(polls)
     for n, body in enumerate(polls):
         send_email(f'Poll Alert ({n + 1}/{length})', body)
