@@ -26,7 +26,7 @@ def _get_polls(pattern: str) -> list:
 
 
 def main() -> None:
-    polls = _get_polls('(#MI|#..(Sen|SEN))')
+    polls = _get_polls('#MI')
     length = len(polls)
     for n, body in enumerate(polls):
         send_email(f'Poll Alert ({n + 1}/{length})', body)
