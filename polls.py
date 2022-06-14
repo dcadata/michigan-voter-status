@@ -11,17 +11,15 @@ def _get_polls(pattern: str) -> list:
     response = requests.get('https://nitter.net/PollTrackerUSA/rss')
     soup = BeautifulSoup(response.text, 'xml')
     tweets = soup.select('item')
+    open('data/polls.txt', 'w').write(tweets[0].find('link').text)
 
     polls = []
     for tweet in tweets:
         if tweet.find('link').text == previous_latest_link:
-            open('data/polls.txt', 'w').write(tweets[0].find('link').text)
             return polls
         title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
         if re.search(pattern, title):
             polls.append(dict(title=title, pubdate=pubdate))
-
-    open('data/polls.txt', 'w').write(tweets[0].find('link').text)
     return polls
 
 
