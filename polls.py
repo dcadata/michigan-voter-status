@@ -25,10 +25,10 @@ def _get_polls(pattern: str) -> list:
     return polls
 
 
-def main() -> None:
+def _send_polls() -> None:
     if polls := _get_polls('#MI'):
         send_email('Poll Alert', '\n\n___\n\n'.join('{title} (PubDate: {pubdate})'.format(**poll) for poll in polls))
 
 
 if __name__ == '__main__':
-    main()
+    _send_polls()
