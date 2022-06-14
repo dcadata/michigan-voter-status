@@ -3,7 +3,7 @@ name: Voter Status Notifier
 on:
   workflow_dispatch:
   schedule:
-    - cron: '3 2 * * *'
+    - cron: '3 7 * * *'
 
 jobs:
   scheduled:
