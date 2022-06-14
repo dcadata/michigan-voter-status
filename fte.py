@@ -18,9 +18,11 @@ def _get_gcb() -> None:
     data.pct_estimate = data.pct_estimate.apply(lambda x: round(x, 1))
     estimates = data.groupby('candidate').pct_estimate.sum()
 
-    email_body = 'D: {D}\nR: {R}\n{difference}'.format(difference='R+{}'.format(round(
+    gcb_summary = 'D: {D}\nR: {R}\n{difference}'.format(difference='R+{}'.format(round(
         estimates['R'] - estimates['D'], 1)), **estimates)
-    send_email('FTE GCB Alert', email_body)
+    if gcb_summary != open('data/gcb_summary.txt').read():
+        send_email('FTE GCB Alert', gcb_summary)
+        open('data/gcb_summary.txt', 'w').write(gcb_summary)
 
 
 if __name__ == '__main__':
