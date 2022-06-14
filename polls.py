@@ -21,7 +21,7 @@ def _get_polls(pattern: str) -> list:
         if re.search(pattern, title):
             polls.append(dict(title=title, pubdate=pubdate))
 
-    open('data/poll_notifier.txt', 'w').write(tweets[0].find('link').text)
+    open('data/polls.txt', 'w').write(tweets[0].find('link').text)
     return polls
 
 
