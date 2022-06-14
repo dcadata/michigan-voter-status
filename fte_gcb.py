@@ -4,12 +4,12 @@ import requests
 from voter_status import has_changes, send_email
 
 
-def _download_fte_gcb() -> None:
+def _download_gcb() -> None:
     response = requests.get('https://projects.fivethirtyeight.com/polls/data/generic_ballot_averages.csv')
     open('data/generic_ballot_averages.csv', 'wb').write(response.content)
 
 
-def _format_fte_gcb() -> str:
+def _format_gcb() -> str:
     data = pd.read_csv('data/generic_ballot_averages.csv', usecols=['candidate', 'pct_estimate', 'election'])
     data = data[data.election == '2022-11-08'].drop(columns=['election'])
     data = data.iloc[-2:]
@@ -21,11 +21,11 @@ def _format_fte_gcb() -> str:
     return output
 
 
-def _send_fte_gcb() -> None:
-    _download_fte_gcb()
+def _send_gcb() -> None:
+    _download_gcb()
     if has_changes():
-        send_email('FTE GCB Alert', _format_fte_gcb())
+        send_email('FTE GCB Alert', _format_gcb())
 
 
 if __name__ == '__main__':
-    _send_fte_gcb()
+    _send_gcb()
