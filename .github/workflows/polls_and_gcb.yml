@@ -19,7 +19,7 @@ jobs:
           SENDER: ${{secrets.SENDER}}
           PASSWORD: ${{secrets.PASSWORD}}
           RECIPIENT: ${{secrets.RECIPIENT}}
-      - run: python fte_gcb.py
+      - run: python fte.py
         env:
           SENDER: ${{secrets.SENDER}}
           PASSWORD: ${{secrets.PASSWORD}}
