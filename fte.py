@@ -15,11 +15,11 @@ def _get_gcb() -> None:
     data = data[data.election == '2022-11-08'].drop(columns=['election'])
     data = data.iloc[-2:]
     data.candidate = data.candidate.apply(lambda x: x[0])
-    data.pct_estimate = data.pct_estimate.apply(lambda x: round(x, 1))
     estimates = data.groupby('candidate').pct_estimate.sum()
+    difference = 'R+{}'.format(round(estimates['R'] - estimates['D'], 1))
+    data.pct_estimate = data.pct_estimate.apply(lambda x: round(x, 1))
 
-    gcb_summary = 'D: {D}\nR: {R}\n{difference}'.format(difference='R+{}'.format(round(
-        estimates['R'] - estimates['D'], 1)), **estimates)
+    gcb_summary = 'D: {D}\nR: {R}\n{difference}'.format(difference=difference, **estimates)
     if gcb_summary != open('data/gcb_summary.txt').read():
         send_email('FTE GCB Alert', gcb_summary)
         open('data/gcb_summary.txt', 'w').write(gcb_summary)
