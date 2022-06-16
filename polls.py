@@ -17,15 +17,15 @@ def _get_polls(pattern: str) -> list:
     for tweet in tweets:
         if tweet.find('link').text == previous_latest_link:
             return polls
-        title, pubdate = map(lambda x: tweet.find(x).text.strip(), ('title', 'pubDate'))
+        title = tweet.find('title').text.strip()
         if re.search(pattern, title):
-            polls.append(dict(title=title, pubdate=pubdate))
+            polls.append(dict(title=title))
     return polls
 
 
 def _send_polls() -> None:
     if polls := _get_polls('(#MI|#..(Sen|SEN) General)'):
-        send_email('Poll Alert', '\n\n___\n\n'.join('{title} (PubDate: {pubdate})'.format(**poll) for poll in polls))
+        send_email('Poll Alert', '\n\n___\n\n'.join('{title}'.format(**poll) for poll in polls))
 
 
 if __name__ == '__main__':
