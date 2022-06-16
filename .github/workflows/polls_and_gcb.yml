@@ -16,6 +16,7 @@ jobs:
       - run: pip3 install -r requirements.txt
       - run: python polls.py
         env:
+          POLLS_PATTERN: ${{secrets.POLLS_PATTERN}}
           SENDER: ${{secrets.SENDER}}
           PASSWORD: ${{secrets.PASSWORD}}
           RECIPIENT: ${{secrets.RECIPIENT}}

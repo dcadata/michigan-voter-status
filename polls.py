@@ -1,4 +1,5 @@
 import re
+from os import environ
 
 import requests
 from bs4 import BeautifulSoup
@@ -24,7 +25,7 @@ def _get_polls(pattern: str) -> list:
 
 
 def _send_polls() -> None:
-    if polls := _get_polls('(#MI|#..(Sen|SEN) General)'):
+    if polls := _get_polls(environ['POLLS_PATTERN']):
         send_email('Poll Alert', '\n\n___\n\n'.join('{title} (PubDate: {pubdate})'.format(**poll) for poll in polls))
 
 
