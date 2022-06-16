@@ -3,7 +3,7 @@ name: Polls and GCB Notifier
 on:
   workflow_dispatch:
   schedule:
-    - cron: '33 12,15,18,21,0,3 * * *'
+    - cron: '13 */2 * * *'
 
 jobs:
   scheduled:
