@@ -5,13 +5,15 @@ from messaging import send_email
 
 
 def _get_gcb() -> None:
-    existing_content = open('data/generic_ballot_averages.csv', 'rb').read()
+    filepath = 'data/generic_ballot_averages.csv'
+
+    existing_content = open(filepath, 'rb').read()
     new_content = requests.get('https://projects.fivethirtyeight.com/polls/data/generic_ballot_averages.csv').content
     if existing_content == new_content:
         return
-    open('data/generic_ballot_averages.csv', 'wb').write(new_content)
+    open(filepath, 'wb').write(new_content)
 
-    data = pd.read_csv('data/generic_ballot_averages.csv', usecols=['candidate', 'pct_estimate', 'election'])
+    data = pd.read_csv(filepath, usecols=['candidate', 'pct_estimate', 'election'])
     data = data[data.election == '2022-11-08'].drop(columns=['election'])
     data = data.iloc[-2:]
     data.candidate = data.candidate.apply(lambda x: x[0])
