@@ -2,8 +2,8 @@ name: Polls and GCB Notifier
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '13 */2 * * *'
+#  schedule:
+#    - cron: '13 */2 * * *'
 
 jobs:
   scheduled:
