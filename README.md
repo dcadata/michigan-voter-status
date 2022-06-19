@@ -8,4 +8,4 @@ To set this up for yourself, fork this repo. Then, go to Settings > Secrets > Ac
 * `BIRTH_MONTH_AND_YEAR`: the month and year of your birth, separated by a "/" - e.g. "12/1985"
 * `ZIP`: the 5-digit zip code corresponding to your address - e.g. "48001"
 
-Then, go to Settings > Notifications (`https://github.com/YOUR_USERNAME/michigan-voter-status/settings/notifications/edit`) and add your email address and (optionally) approved header.
+Then, go to Settings > Notifications (`https://github.com/YOUR_USERNAME/michigan-voter-status/settings/notifications/edit`) and add your email address.
