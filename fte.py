@@ -1,16 +1,19 @@
+from time import sleep
+
 import pandas as pd
 import requests
+from bs4 import BeautifulSoup
 
 from messaging import send_email
 
 
-def _get_gcb() -> None:
+def _get_gcb(session: requests.Session) -> str:
     filepath = 'data/generic_ballot_averages.csv'
 
     existing_content = open(filepath, 'rb').read()
-    new_content = requests.get('https://projects.fivethirtyeight.com/polls/data/generic_ballot_averages.csv').content
+    new_content = session.get('https://projects.fivethirtyeight.com/polls/data/generic_ballot_averages.csv').content
     if existing_content == new_content:
-        return
+        return ''
     open(filepath, 'wb').write(new_content)
 
     data = pd.read_csv(filepath, usecols=['candidate', 'pct_estimate', 'election'])
@@ -23,10 +26,31 @@ def _get_gcb() -> None:
     estimates = data.groupby('candidate').pct_estimate.sum()
 
     gcb_summary = 'D: {D}\nR: {R}\nR+{difference}'.format(difference=difference, **estimates)
-    if gcb_summary != open('data/gcb_summary.txt').read():
+    return gcb_summary if gcb_summary != open('data/gcb_summary.txt').read() else ''
+
+
+def _get_forecast(session: requests.Session) -> str:
+    response = session.get('https://fivethirtyeight.com/politics/feed/')
+    feed = BeautifulSoup(response.text, 'xml')
+    data = []
+    for item in feed.find_all('item'):
+        if 'forecast' in item.find('title').text.lower():
+            data.append([item.find(field).text for field in ('title', 'link', 'pubDate')])
+    forecast_summary = '\n\n___\n\n'.join('\n'.join(i) for i in data)
+    return forecast_summary if forecast_summary != open('data/forecast_summary.txt').read() else ''
+
+
+def main():
+    session = requests.Session()
+    if gcb_summary := _get_gcb(session):
         send_email('FTE GCB Alert', gcb_summary)
         open('data/gcb_summary.txt', 'w').write(gcb_summary)
+    sleep(1)
+    if forecast_summary := _get_forecast(session):
+        send_email('FTE Forecast Alert', forecast_summary)
+        open('data/forecast_summary.txt', 'w').write(forecast_summary)
+    session.close()
 
 
 if __name__ == '__main__':
-    _get_gcb()
+    main()
