@@ -4,7 +4,7 @@ from os import environ
 import requests
 from bs4 import BeautifulSoup
 
-from voter_status import send_email
+from messaging import send_email
 
 
 def _get_polls(pattern: str) -> list:

@@ -1,9 +1,9 @@
-from email.mime.text import MIMEText
 from os import environ
-from smtplib import SMTP_SSL
 
 import requests
 from bs4 import BeautifulSoup
+
+from messaging import send_email
 
 
 class MIVoterRegistrationChecker:
@@ -47,18 +47,6 @@ class MIVoterRegistrationChecker:
         ballot_previews = [f'Ballot Preview: {i.text}' for i in _find_all_endswith('Ballot Preview')]
         restructured = list(zip(dates, descriptions, ballot_previews))
         return '\n'.join(' - '.join(i) for i in restructured)
-
-
-def send_email(subject: str, body: str) -> None:
-    msg = MIMEText(body)
-    msg['Subject'] = subject
-    msg['From'] = environ['SENDER']
-    msg['To'] = environ['RECIPIENT']
-
-    server = SMTP_SSL(host='smtp.gmail.com', port=465)
-    server.login(environ['SENDER'], environ['PASSWORD'])
-    server.send_message(msg)
-    server.quit()
 
 
 def main() -> None:

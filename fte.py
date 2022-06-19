@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-from voter_status import send_email
+from messaging import send_email
 
 
 def _get_gcb() -> None:
