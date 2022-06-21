@@ -1,3 +1,4 @@
+import json
 from os import environ
 
 import requests
@@ -16,8 +17,8 @@ def main() -> None:
     )
     response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=params)
     page = BeautifulSoup(response.text, 'lxml')
-    status = 'Registered: ' + ('Yes' if page.find(text='Yes, you are registered!') else 'No')
-    open('status.txt', 'w').write(status)
+    status = dict(is_registered=bool(page.find(text='Yes, you are registered!')))
+    json.dump(status, open('status.json', 'w'))
 
 
 if __name__ == '__main__':
