@@ -16,8 +16,16 @@ def main() -> None:
         ZipCode=environ['ZIP'],
     )
     response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=params)
+
     page = BeautifulSoup(response.text, 'lxml')
-    status = dict(is_registered=bool(page.find(text='Yes, you are registered!')))
+    election_dates = page.find_all('td', {'data-label': 'Election Date'})
+    ballot_previews = page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
+
+    status = dict(
+        is_registered=bool(page.find(text='Yes, you are registered!')),
+        is_ballot_preview_available=dict((date.text, prev.text == 'View') for date, prev in zip(
+            election_dates, ballot_previews)),
+    )
     json.dump(status, open('status.json', 'w'))
 
 
