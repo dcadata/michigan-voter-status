@@ -25,6 +25,8 @@ def main() -> None:
         is_registered=bool(page.find(text='Yes, you are registered!')),
         is_ballot_preview_available=dict((date.text, prev.text == 'View') for date, prev in zip(
             election_dates, ballot_previews)),
+        on_absentee_voter_list=bool(page.find('p', text=lambda x: str(x).startswith(
+            'You are on the permanent absentee voter list.'))),
     )
     json.dump(status, open('status.json', 'w'))
 
