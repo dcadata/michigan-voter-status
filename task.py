@@ -20,6 +20,7 @@ def main() -> None:
     page = BeautifulSoup(response.text, 'lxml')
     election_dates = page.find_all('td', {'data-label': 'Election Date'})
     ballot_previews = page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
+    absentee_voter_info_block = page.find('div', dict(id='lblAbsenteeVoterInformation'))
 
     status = dict(
         is_registered=bool(page.find(text='Yes, you are registered!')),
@@ -27,6 +28,10 @@ def main() -> None:
             election_dates, ballot_previews)),
         on_absentee_voter_list=bool(page.find('p', text=lambda x: str(x).startswith(
             'You are on the permanent absentee voter list.'))),
+        not_av_application_received=(
+                bool(absentee_voter_info_block.select('p.maroon')) or bool(absentee_voter_info_block.find(
+            'p', text=lambda x: str(x).startswith('Your clerk has not recorded receiving your AV Application.')))
+        ),
     )
     json.dump(status, open('status.json', 'w'))
 
