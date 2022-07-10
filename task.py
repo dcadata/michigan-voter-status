@@ -18,14 +18,14 @@ def main() -> None:
     response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=params)
 
     page = BeautifulSoup(response.text, 'lxml')
-    election_dates = page.find_all('td', {'data-label': 'Election Date'})
+    upcoming_election_dates = page.find_all('td', {'data-label': 'Election Date'})
     ballot_previews = page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
     absentee_voter_info_block = page.find('div', dict(id='lblAbsenteeVoterInformation'))
 
     status = dict(
         is_registered=bool(page.find(text='Yes, you are registered!')),
         is_ballot_preview_available=dict((date.text, prev.text == 'View') for date, prev in zip(
-            election_dates, ballot_previews)),
+            upcoming_election_dates, ballot_previews)),
         on_absentee_voter_list=bool(page.find('p', text=lambda x: str(x).startswith(
             'You are on the permanent absentee voter list.'))),
         not_av_application_received=(
