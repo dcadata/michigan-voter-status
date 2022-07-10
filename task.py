@@ -33,7 +33,7 @@ def main() -> None:
             'p', text=lambda x: str(x).startswith('Your clerk has not recorded receiving your AV Application.')))
         ),
     )
-    json.dump(status, open('status.json', 'w'))
+    json.dump(status, open('status.json', 'w'), indent=2)
 
 
 if __name__ == '__main__':
