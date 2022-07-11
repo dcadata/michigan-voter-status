@@ -25,7 +25,7 @@ def _get_voter_status(**voter_info) -> None:
 
     status = dict(
         is_registered=bool(page.find(text='Yes, you are registered!')),
-        absentee_voter_info={},
+        absentee_voter_info=dict(application_received=None),
         upcoming_elections=[],
     )
 
@@ -33,22 +33,19 @@ def _get_voter_status(**voter_info) -> None:
     upcoming_election_descriptions = page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Description'})
     ballot_previews = page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
     absentee_voter_info_block = page.find('div', dict(id='lblAbsenteeVoterInformation'))
-    av_application_not_received = bool(absentee_voter_info_block.find('p', text=lambda x: str(x).startswith(
-        'Your clerk has not recorded receiving your AV Application.')))
 
-    if av_application_not_received:
-        status['absentee_voter_info'].update(application_received=False)
-    else:
+    av_application_not_received = bool(absentee_voter_info_block.find(text=lambda x: str(x).startswith(
+        'Your clerk has not recorded receiving your AV Application.')))
+    if not av_application_not_received:
         bolded = absentee_voter_info_block.find_all('b')
         for i in bolded:
             i.extract()
         nonbolded = absentee_voter_info_block.get_text(separator='\n', strip=True).splitlines()
-        status['absentee_voter_info'].update(application_received=True)
         status['absentee_voter_info'].update(dict(
             zip_longest([i.text.replace(' ', '_').lower() for i in bolded], nonbolded)))
 
-    status['absentee_voter_info'].update(on_permanent_list=bool(page.find('p', text=lambda x: str(x).startswith(
-        'You are on the permanent absentee voter list.'))))
+    status['absentee_voter_info']['on_permanent_list'] = bool(page.find('p', text=lambda x: str(x).startswith(
+        'You are on the permanent absentee voter list.')))
 
     status['upcoming_elections'].extend([
         dict(date=date.text, description=desc.text, ballot_preview_available=prev.text == 'View')
