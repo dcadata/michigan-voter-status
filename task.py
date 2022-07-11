@@ -21,9 +21,9 @@ def _read_voter_info() -> dict:
 
 class VoterStatusGetter:
     def __init__(self, **voter_info):
+        self._voter_info = voter_info.copy()
         self._page = None
         self.status = {}
-        self._voter_info = voter_info.copy()
 
     def get_voter_status(self) -> None:
         self._get_page()
