@@ -1,12 +1,17 @@
 import json
+import os
 from itertools import zip_longest
-from os import environ
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def _read_voter_info() -> dict:
+def _read_voter_info(example: int = None) -> dict:
+    if example is None:
+        environ = os.environ
+    else:
+        environ = json.load(open('examples.json'))[example]
+
     first_name, last_name = environ['NAME'].split(None, 1)
     birth_month, birth_year = environ['BIRTH_MONTH_AND_YEAR'].split('/', 1)
     voter_info = dict(
