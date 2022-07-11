@@ -26,9 +26,14 @@ class VoterStatusGetter:
         self._voter_info = voter_info.copy()
 
     def get_voter_status(self) -> None:
+        self._get_page()
+        self._get_status()
+
+    def _get_page(self) -> None:
         response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=self._voter_info)
         self._page = BeautifulSoup(response.text, 'lxml')
 
+    def _get_status(self) -> None:
         self.status.update(is_registered=self._is_registered)
         if self.status['is_registered']:
             self.status.update(
