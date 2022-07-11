@@ -91,4 +91,4 @@ class VoterStatusGetter:
 
 
 if __name__ == '__main__':
-    VoterStatusGetter(_read_voter_info(os.environ)).get_voter_status()
+    VoterStatusGetter(_read_voter_info(os.environ), save_status=True).get_voter_status()
