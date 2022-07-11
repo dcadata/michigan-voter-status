@@ -1,28 +1,28 @@
 import json
+import os
 from itertools import zip_longest
-from os import environ
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def _read_voter_info() -> dict:
-    first_name, last_name = environ['NAME'].split(None, 1)
-    birth_month, birth_year = environ['BIRTH_MONTH_AND_YEAR'].split('/', 1)
+def _read_voter_info(voter_info) -> dict:
+    first_name, last_name = voter_info['NAME'].split(None, 1)
+    birth_month, birth_year = voter_info['BIRTH_MONTH_AND_YEAR'].split('/', 1)
     voter_info = dict(
         FirstName=first_name,
         LastName=last_name,
         NameBirthMonth=birth_month,
         NameBirthYear=birth_year,
-        ZipCode=environ['ZIP'],
+        ZipCode=voter_info['ZIP'],
     )
     return voter_info
 
 
 class VoterStatusGetter:
-    def __init__(self, save_status: bool = None, **voter_info):
+    def __init__(self, voter_params: dict = None, save_status: bool = None):
+        self._voter_params = voter_params
         self._save_status = save_status
-        self._voter_info = voter_info
         self._page = None
         self.status = {}
 
@@ -31,7 +31,7 @@ class VoterStatusGetter:
         self._get_status()
 
     def _get_page(self) -> None:
-        response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=self._voter_info)
+        response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=self._voter_params)
         self._page = BeautifulSoup(response.text, 'lxml')
 
     def _get_status(self) -> None:
@@ -91,4 +91,4 @@ class VoterStatusGetter:
 
 
 if __name__ == '__main__':
-    VoterStatusGetter(**_read_voter_info()).get_voter_status()
+    VoterStatusGetter(_read_voter_info(os.environ)).get_voter_status()
