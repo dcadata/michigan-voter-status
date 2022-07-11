@@ -1,6 +1,6 @@
 # michigan-voter-status
 
-Uses GitHub's own "email on push" to notify specified Michigan voter of registration status changes. If you receive an email, it's an indication that your voter registration status has changed.
+Uses GitHub's own "email on push" to notify specified Michigan voter of status changes. If you receive an email, it's an indication that your voter status has changed.
 
 To set this up for yourself:
 
