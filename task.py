@@ -42,6 +42,9 @@ class VoterStatusGetter:
             )
         json.dump(self.status, open('status.json', 'w'), indent=2)
 
+    def _find_all_based_on_data_label(self, label: str) -> list:
+        return self._page.find_all('td', {'data-label': lambda x: str(x).strip() == label})
+
     @property
     def _is_registered(self) -> bool:
         return bool(self._page.find(text='Yes, you are registered!'))
@@ -81,11 +84,11 @@ class VoterStatusGetter:
 
     @property
     def _upcoming_election_descriptions(self) -> list:
-        return self._page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Description'})
+        return self._find_all_based_on_data_label('Description')
 
     @property
     def _ballot_previews(self) -> list:
-        return self._page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
+        return self._find_all_based_on_data_label('Ballot Preview')
 
 
 if __name__ == '__main__':
