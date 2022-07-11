@@ -34,11 +34,12 @@ class VoterStatusGetter:
         response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=self._voter_info)
         self._page = BeautifulSoup(response.text, 'lxml')
 
-        self.status.update(
-            is_registered=self._is_registered,
-            absentee_voter_info=self._absentee_voter_info,
-            upcoming_elections=self._upcoming_elections,
-        )
+        self.status.update(is_registered=self._is_registered)
+        if self.status['is_registered']:
+            self.status.update(
+                absentee_voter_info=self._absentee_voter_info,
+                upcoming_elections=self._upcoming_elections,
+            )
         json.dump(self.status, open('status.json', 'w'), indent=2)
 
     @property
