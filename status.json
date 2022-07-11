@@ -1,9 +1,20 @@
 {
   "is_registered": true,
-  "is_ballot_preview_available": {
-    "8/2/2022": true,
-    "11/8/2022": false
+  "absentee_voter_info": {
+    "application_received": true,
+    "null": "Your clerk has not recorded receiving your AV Application.",
+    "on_permanent_list": true
   },
-  "on_absentee_voter_list": true,
-  "not_av_application_received": true
+  "upcoming_elections": [
+    {
+      "date": "8/2/2022",
+      "description": "State Primary",
+      "ballot_preview_available": true
+    },
+    {
+      "date": "11/8/2022",
+      "description": "State General",
+      "ballot_preview_available": false
+    }
+  ]
 }
