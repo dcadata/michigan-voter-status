@@ -19,41 +19,68 @@ def _read_voter_info() -> dict:
     return voter_info
 
 
-def _get_voter_status(**voter_info) -> None:
-    response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=voter_info)
-    page = BeautifulSoup(response.text, 'lxml')
+class VoterStatusGetter:
+    def __init__(self, **voter_info):
+        self._page = None
+        self.status = {}
+        self._voter_info = voter_info.copy()
 
-    status = dict(
-        is_registered=bool(page.find(text='Yes, you are registered!')),
-        absentee_voter_info=dict(application_received=None),
-        upcoming_elections=[],
-    )
+    def get_voter_status(self) -> None:
+        response = requests.post('https://mvic.sos.state.mi.us/Voter/SearchByName', data=self._voter_info)
+        self._page = BeautifulSoup(response.text, 'lxml')
 
-    upcoming_election_dates = page.find_all('td', {'data-label': 'Election Date'})
-    upcoming_election_descriptions = page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Description'})
-    ballot_previews = page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
-    absentee_voter_info_block = page.find('div', dict(id='lblAbsenteeVoterInformation'))
+        self.status.update(
+            is_registered=self._is_registered,
+            absentee_voter_info=self._absentee_voter_info,
+            upcoming_elections=self._upcoming_elections,
+        )
+        json.dump(self.status, open('status.json', 'w'), indent=2)
 
-    av_application_not_received = bool(absentee_voter_info_block.find(text=lambda x: str(x).startswith(
-        'Your clerk has not recorded receiving your AV Application.')))
-    if not av_application_not_received:
-        bolded = absentee_voter_info_block.find_all('b')
-        for i in bolded:
-            i.extract()
-        nonbolded = absentee_voter_info_block.get_text(separator='\n', strip=True).splitlines()
-        status['absentee_voter_info'].update(dict(
-            zip_longest([i.text.replace(' ', '_').lower() for i in bolded], nonbolded)))
+    @property
+    def _is_registered(self) -> bool:
+        return bool(self._page.find(text='Yes, you are registered!'))
 
-    status['absentee_voter_info']['on_permanent_list'] = bool(page.find('p', text=lambda x: str(x).startswith(
-        'You are on the permanent absentee voter list.')))
+    @property
+    def _absentee_voter_info(self) -> dict:
+        absentee_voter_info = {}
+        absentee_voter_info_block = self._page.find('div', dict(id='lblAbsenteeVoterInformation'))
+        av_application_not_received = bool(absentee_voter_info_block.find(text=lambda x: str(x).startswith(
+            'Your clerk has not recorded receiving your AV Application.')))
 
-    status['upcoming_elections'].extend([
-        dict(date=date.text, description=desc.text, ballot_preview_available=prev.text == 'View')
-        for date, desc, prev in zip(upcoming_election_dates, upcoming_election_descriptions, ballot_previews)
-    ])
+        if not av_application_not_received:
+            bolded = absentee_voter_info_block.find_all('b')
+            for i in bolded:
+                i.extract()
+            nonbolded = absentee_voter_info_block.get_text(separator='\n', strip=True).splitlines()
+            absentee_voter_info.update(dict(zip_longest([i.text.replace(' ', '_').lower() for i in bolded], nonbolded)))
 
-    json.dump(status, open('status.json', 'w'), indent=2)
+        absentee_voter_info.update(on_permanent_list=self._on_permanent_list)
+        return absentee_voter_info
+
+    @property
+    def _on_permanent_list(self) -> bool:
+        return bool(self._page.find('p', text=lambda x: str(x).startswith(
+            'You are on the permanent absentee voter list.')))
+
+    @property
+    def _upcoming_elections(self) -> list:
+        return [
+            dict(date=dt.text, description=desc.text, ballot_preview_available=bal.text == 'View') for dt, desc, bal in
+            zip(self._upcoming_election_dates, self._upcoming_election_descriptions, self._ballot_previews)
+        ]
+
+    @property
+    def _upcoming_election_dates(self) -> list:
+        return self._page.find_all('td', {'data-label': 'Election Date'})
+
+    @property
+    def _upcoming_election_descriptions(self) -> list:
+        return self._page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Description'})
+
+    @property
+    def _ballot_previews(self) -> list:
+        return self._page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
 
 
 if __name__ == '__main__':
-    _get_voter_status(**_read_voter_info())
+    VoterStatusGetter(**_read_voter_info()).get_voter_status()
