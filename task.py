@@ -20,8 +20,9 @@ def _read_voter_info() -> dict:
 
 
 class VoterStatusGetter:
-    def __init__(self, **voter_info):
-        self._voter_info = voter_info.copy()
+    def __init__(self, save_status: bool = None, **voter_info):
+        self._save_status = save_status
+        self._voter_info = voter_info
         self._page = None
         self.status = {}
 
@@ -40,7 +41,8 @@ class VoterStatusGetter:
                 absentee_voter_info=self._absentee_voter_info,
                 upcoming_elections=self._upcoming_elections,
             )
-        json.dump(self.status, open('status.json', 'w'), indent=2)
+        if self._save_status:
+            json.dump(self.status, open('status.json', 'w'), indent=2)
 
     @property
     def _is_registered(self) -> bool:
