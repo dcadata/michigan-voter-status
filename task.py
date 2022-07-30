@@ -107,7 +107,7 @@ def _run_examples() -> None:
         vsg.get_voter_status()
         results.append(vsg.flattened)
         time.sleep(2)
-    json.dump(results, open('statuses.multi.json', 'w'), indent=2)
+    json.dump(results, open('examples.statuses.json', 'w'), indent=2)
 
 
 if __name__ == '__main__':
