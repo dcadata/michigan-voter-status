@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from itertools import zip_longest
 
 import requests
@@ -66,6 +67,14 @@ class VoterStatusGetter:
         return absentee_voter_info
 
     @property
+    def flattened(self) -> dict:
+        data = dict(voter=self._voter_params, status=self.status)
+        result = data['voter'].copy()
+        result['is_registered'] = data['status']['is_registered']
+        result.update(data['status'].get('absentee_voter_info', {}))
+        return result
+
+    @property
     def _on_permanent_list(self) -> bool:
         return bool(self._page.find('p', text=lambda x: str(x).startswith(
             'You are on the permanent absentee voter list.')))
@@ -88,6 +97,17 @@ class VoterStatusGetter:
     @property
     def _ballot_previews(self) -> list:
         return self._page.find_all('td', {'data-label': lambda x: str(x).strip() == 'Ballot Preview'})
+
+
+def _run_examples() -> None:
+    voters = json.load(open('examples.json'))
+    results = []
+    for v in voters:
+        vsg = VoterStatusGetter(_read_voter_info(v), save_status=False)
+        vsg.get_voter_status()
+        results.append(vsg.flattened)
+        time.sleep(2)
+    json.dump(results, open('statuses.multi.json', 'w'), indent=2)
 
 
 if __name__ == '__main__':
