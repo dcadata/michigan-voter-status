@@ -7,11 +7,5 @@
     "ballot_received": "7/30/2022",
     "on_permanent_list": true
   },
-  "upcoming_elections": [
-    {
-      "date": "8/2/2022",
-      "description": "State Primary",
-      "ballot_preview_available": true
-    }
-  ]
+  "upcoming_elections": []
 }
