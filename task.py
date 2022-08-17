@@ -53,6 +53,9 @@ class VoterStatusGetter:
     def _absentee_voter_info(self) -> dict:
         absentee_voter_info = {}
         absentee_voter_info_block = self._page.find('div', dict(id='lblAbsenteeVoterInformation'))
+        if not absentee_voter_info_block:
+            return {}
+
         av_application_not_received = bool(absentee_voter_info_block.find(text=lambda x: str(x).startswith(
             'Your clerk has not recorded receiving your AV Application.')))
 
