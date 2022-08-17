@@ -1,11 +1,5 @@
 {
   "is_registered": true,
-  "absentee_voter_info": {
-    "election_date": "8/2/2022",
-    "application_received": "7/29/2022",
-    "ballot_sent": "7/29/2022",
-    "ballot_received": "7/30/2022",
-    "on_permanent_list": true
-  },
+  "absentee_voter_info": {},
   "upcoming_elections": []
 }
