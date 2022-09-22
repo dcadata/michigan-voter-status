@@ -1,5 +1,17 @@
 {
   "is_registered": true,
-  "absentee_voter_info": {},
-  "upcoming_elections": []
+  "absentee_voter_info": {
+    "election_date": "11/8/2022",
+    "application_received": "7/29/2022",
+    "ballot_sent": null,
+    "ballot_received": null,
+    "on_permanent_list": true
+  },
+  "upcoming_elections": [
+    {
+      "date": "11/8/2022",
+      "description": "State General",
+      "ballot_preview_available": true
+    }
+  ]
 }
