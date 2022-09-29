@@ -3,7 +3,7 @@
   "absentee_voter_info": {
     "election_date": "11/8/2022",
     "application_received": "7/29/2022",
-    "ballot_sent": null,
+    "ballot_sent": "9/29/2022",
     "ballot_received": null,
     "on_permanent_list": true
   },
