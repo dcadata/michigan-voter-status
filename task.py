@@ -21,7 +21,7 @@ def _read_voter_info(voter_info) -> dict:
 
 
 class VoterStatusGetter:
-    def __init__(self, voter_params: dict = None, save_status: bool = None):
+    def __init__(self, voter_params: dict = None, save_status: bool = None) -> None:
         self._voter_params = voter_params
         self._save_status = save_status
         self._page = None
