@@ -1,7 +1,5 @@
 {
   "is_registered": true,
-  "absentee_voter_info": {
-    "on_permanent_list": true
-  },
+  "absentee_voter_info": {},
   "upcoming_elections": []
 }
