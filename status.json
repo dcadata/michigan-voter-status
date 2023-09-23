@@ -1,5 +1,13 @@
 {
   "is_registered": true,
-  "absentee_voter_info": {},
-  "upcoming_elections": []
+  "absentee_voter_info": {
+    "on_permanent_list": true
+  },
+  "upcoming_elections": [
+    {
+      "date": "11/7/2023",
+      "description": "November Consolidated",
+      "ballot_preview_available": true
+    }
+  ]
 }
