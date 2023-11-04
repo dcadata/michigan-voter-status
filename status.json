@@ -1,6 +1,10 @@
 {
   "is_registered": true,
   "absentee_voter_info": {
+    "election_date": "11/7/2023",
+    "application_received": "11/2/2023",
+    "ballot_sent": "11/2/2023",
+    "ballot_received": "11/2/2023",
     "on_permanent_list": true
   },
   "upcoming_elections": [
