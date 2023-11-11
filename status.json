@@ -7,11 +7,5 @@
     "ballot_received": "11/2/2023",
     "on_permanent_list": true
   },
-  "upcoming_elections": [
-    {
-      "date": "11/7/2023",
-      "description": "November Consolidated",
-      "ballot_preview_available": true
-    }
-  ]
+  "upcoming_elections": []
 }
