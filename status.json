@@ -3,11 +3,5 @@
   "absentee_voter_info": {
     "on_permanent_list": true
   },
-  "upcoming_elections": [
-    {
-      "date": "2/27/2024",
-      "description": "Presidential Primary",
-      "ballot_preview_available": true
-    }
-  ]
+  "upcoming_elections": []
 }
