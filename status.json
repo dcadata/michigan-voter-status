@@ -1,6 +1,7 @@
 {
   "is_registered": true,
   "absentee_voter_info": {
+    "null": "Ballot received:",
     "on_permanent_list": true
   },
   "upcoming_elections": []
