@@ -4,11 +4,5 @@
     "null": "Ballot received:",
     "on_permanent_list": true
   },
-  "upcoming_elections": [
-    {
-      "date": "5/7/2024",
-      "description": "May Consolidated",
-      "ballot_preview_available": true
-    }
-  ]
+  "upcoming_elections": []
 }
