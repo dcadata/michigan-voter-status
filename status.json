@@ -1,5 +1,14 @@
 {
   "is_registered": true,
-  "absentee_voter_info": {},
-  "upcoming_elections": []
+  "absentee_voter_info": {
+    "null": "Ballot received:",
+    "on_permanent_list": true
+  },
+  "upcoming_elections": [
+    {
+      "date": "8/6/2024",
+      "description": "State Primary",
+      "ballot_preview_available": true
+    }
+  ]
 }
