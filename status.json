@@ -4,11 +4,5 @@
     "null": "Ballot received:",
     "on_permanent_list": true
   },
-  "upcoming_elections": [
-    {
-      "date": "8/6/2024",
-      "description": "State Primary",
-      "ballot_preview_available": true
-    }
-  ]
+  "upcoming_elections": []
 }
