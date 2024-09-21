@@ -1,5 +1,14 @@
 {
   "is_registered": true,
-  "absentee_voter_info": {},
-  "upcoming_elections": []
+  "absentee_voter_info": {
+    "null": "No",
+    "on_permanent_list": false
+  },
+  "upcoming_elections": [
+    {
+      "date": "11/5/2024",
+      "description": "State General",
+      "ballot_preview_available": true
+    }
+  ]
 }
